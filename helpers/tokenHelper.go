@@ -3,14 +3,13 @@ package helpers
 import (
 	"context"
 	"fmt"
-	"jwt-golang/database"
 	"log"
 	"os"
 	"time"
 
 	"github.com/crystinameth/jwt-golang/database"
-	"github.com/dgrijalva/jwt-go"
 	jwt "github.com/dgrijalva/jwt-go"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -58,3 +57,5 @@ func GenerateAllTokens(email string, firstname string, lastname string, usertype
 	}
 	return token, refreshToken, err
 }
+
+func UpdateAllTokens
