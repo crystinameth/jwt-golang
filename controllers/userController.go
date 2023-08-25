@@ -118,7 +118,7 @@ func Login() gin.HandlerFunc{
 			return
 		}
 
-		passwordIsValid, msg := VerifyPassword(*user.Password, *&foundUser.Password)
+		passwordIsValid, msg := VerifyPassword(*user.Password, *foundUser.Password)
 		defer cancel()
 		if passwordIsValid != true {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
