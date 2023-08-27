@@ -3,7 +3,7 @@ package routes
 import(
 	controller "github.com/crystinameth/jwt-golang/controllers"
 	"github.com/crystinameth/jwt-golang/middleware"
-	"github.com/gin-gonic.gin"
+	"github.com/gin-gonic/gin"
 
 )
 

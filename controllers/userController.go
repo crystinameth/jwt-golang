@@ -71,7 +71,7 @@ func Signup() gin.HandlerFunc{
 
 		password := HashPassword(*user.Password)
 		user.Password = &password
-		count, err := userCollection.CountDocuments(ctx, bson.M{"phone":user.Phone})
+		count, err = userCollection.CountDocuments(ctx, bson.M{"phone":user.Phone})
 		defer cancel()
 		if err != nil {
 			log.Panic(err)
@@ -143,7 +143,7 @@ func Login() gin.HandlerFunc{
 
 func GetUsers()gin.HandlerFunc{
 	return func(c *gin.Context){
-		helper.CheckUserType(c, "ADMIN"); err != nil {
+		if err := helper.CheckUserType(c, "ADMIN"); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
 			return
 		}
@@ -161,17 +161,9 @@ func GetUsers()gin.HandlerFunc{
 		startIndex, err = strconv.Atoi(c.Query("startIndex"))
 
 		matchStage := bson.D{{"$match", bson.D{{}}}}
-		groupStage := bson.D{{"$group", bson.D{
-			{"_id", bson.D{{"_id", "null"}}}, 
-			{"total_count", bson.D{{"$sum", 1}}},
-			{"data", bson.D{{"$push", "$$ROOT"}}}
-		}}}
+		groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"_id", "null"}}},{"total_count", bson.D{{"$sum", 1}}},{"data", bson.D{{"$push", "$$ROOT"}}}}}}
 		projectStage := bson.D{
-			{"$project", bson.D{
-				{"_id", 0},
-				{"total_count", 1},
-				{"user_items", bson.D{{"$slice", []interface{}{"$data", startIndex, recordPerPage}}}},
-			}}
+			{"$project", bson.D{{"_id", 0},{"total_count", 1},{"user_items", bson.D{{"$slice", []interface{}{"$data", startIndex, recordPerPage}}}},}}
 		}
 
 		result, err := userCollection.Aggregate(ctx, mongo.Pipeline{
